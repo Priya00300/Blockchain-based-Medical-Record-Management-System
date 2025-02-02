@@ -17,13 +17,22 @@ function Login() {
     );
 }
 
-function handleLogin(event) {
+async function handleLogin(event) {
     event.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    // Add your login logic here (e.g., API call to log in the patient)
-    console.log('Login data:', { email, password });
+    try {
+        const response = await fetch('http://localhost:5000/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+        });
+        const data = await response.json();
+        console.log('Login successful:', data);
+    } catch (error) {
+        console.error('Login failed:', error);
+    }
 }
 
 export default Login;

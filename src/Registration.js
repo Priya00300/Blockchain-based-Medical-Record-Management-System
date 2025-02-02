@@ -23,15 +23,24 @@ function Registration() {
     );
 }
 
-function handleRegistration(event) {
+async function handleRegistration(event) {
     event.preventDefault();
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const patientDetails = document.getElementById('patient-details').value;
 
-    // Add your registration logic here (e.g., API call to register the doctor)
-    console.log('Registration data:', { name, email, password, patientDetails });
+    try {
+        const response = await fetch('http://localhost:5000/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password, patientDetails }),
+        });
+        const data = await response.json();
+        console.log('Registration successful:', data);
+    } catch (error) {
+        console.error('Registration failed:', error);
+    }
 }
 
 export default Registration;
