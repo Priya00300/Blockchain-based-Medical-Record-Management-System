@@ -17,4 +17,3 @@ contract MedicalRecordsTest is Test {
         assertEq(ipfsHash, "QmExampleHash");
     }
 }
-

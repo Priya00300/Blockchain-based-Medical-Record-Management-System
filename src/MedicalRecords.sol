@@ -2,10 +2,10 @@
 pragma solidity ^0.8.19;
 
 contract MedicalRecords {
-    uint private _recordCounter;
-    mapping(uint => string) private _ipfsHashes;
+    uint256 private _recordCounter;
+    mapping(uint256 => string) private _ipfsHashes;
 
-    event RecordAdded(uint recordId, string ipfsHash);
+    event RecordAdded(uint256 recordId, string ipfsHash);
 
     function addRecord(string memory _ipfsHash) public {
         require(bytes(_ipfsHash).length > 0, "IPFS hash cannot be empty");
@@ -14,7 +14,7 @@ contract MedicalRecords {
         emit RecordAdded(_recordCounter, _ipfsHash);
     }
 
-    function getRecord(uint _recordId) public view returns (string memory) {
+    function getRecord(uint256 _recordId) public view returns (string memory) {
         require(_recordId > 0 && _recordId <= _recordCounter, "Invalid record ID");
         return _ipfsHashes[_recordId];
     }
