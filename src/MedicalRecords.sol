@@ -1,21 +1,43 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
+import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract MedicalRecords {
-    uint256 private _recordCounter;
-    mapping(uint256 => string) private _ipfsHashes;
+contract MedicalRecords is AccessControl{
+    bytes32 public constant DOCTOR_ROLE = keccak256("DOCTOR_ROLE");
+    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
 
-    event RecordAdded(uint256 recordId, string ipfsHash);
-
-    function addRecord(string memory _ipfsHash) public {
-        require(bytes(_ipfsHash).length > 0, "IPFS hash cannot be empty");
-        _recordCounter++;
-        _ipfsHashes[_recordCounter] = _ipfsHash;
-        emit RecordAdded(_recordCounter, _ipfsHash);
+    struct Patient {
+         string name;
+         string email;
+         address walletAddress;
+         uint registrationDate;
     }
 
-    function getRecord(uint256 _recordId) public view returns (string memory) {
-        require(_recordId > 0 && _recordId <= _recordCounter, "Invalid record ID");
-        return _ipfsHashes[_recordId];
+    struct Doctor{
+        string name;
+        string email;
+        address walletAddress;
+        uint registrationDate;
+    }
+    struct Record{
+        string ipfsHash;
+        uint timestamp;
+        address doctor;
+        string recordType;
+        string description;
+    }
+    mapping(address => Patient) public patients;
+    mapping(address => Doctor) public doctors;
+    mapping(address => mapping(string => Record[])) public patientRecords;
+    mapping(address =>address[]) public authorizedDoctors;
+
+    uint public recordCounter;
+
+    event PatientRegistered(address indexed patientAddress, string name, string email);
+    event DoctorRegistered(address indexed doctorAddress, string name, string email);
+    event RecordAdded(address indexed patientAddress,uint recordId, address indexed doctorAddress, string recordType, string description, string ipfsHash);
+    constructor ()  
+    {
+        _grantRole(ADMIN_ROLE, msg.sender);
     }
 }
