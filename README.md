@@ -63,3 +63,4 @@ $ forge --help
 $ anvil --help
 $ cast --help
 ```
+> **Note:** Run `forge install OpenZeppelin/openzeppelin-contracts` if build fails.
